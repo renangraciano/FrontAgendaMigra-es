@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="assets/js/form.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/form.css">
+    <title>Agendamento de Migrações :: Hostgator Latam</title>
+   
+   
+    <!-- component template -->
+    <script type="text/x-template" id="grid-template">
+      <table>
+        <thead>
+          <tr>
+            <th v-for="key in columns"
+              @click="sortBy(key)"
+              :class="{ active: sortKey == key }">
+              {{ key | capitalize }}
+              <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'">
+              </span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="entry in filteredHeroes">
+            <td v-for="key in columns">
+              {{entry[key]}}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </script>
+</head>
+<body>
+
+  <!-- demo root element -->
+  <div id="demo" class="container">
+
+    <!---->
+    <div id="data">
+
+      <div id="row">
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Migração Interna :: Agendamento</h4>
+            <p>Preencha os campos necessários para agendar a Migração.</p>
+            <hr>
+            <p class="mb-0">Detalhes são importantes, por gentileza preencha os campos necessários.</p>
+          </div>    
+    </div>
+    
+        <form action="">
+            <div class="form-group">
+              <h6>Ticket ID:</h6>
+              <input type="text" name="ticket_id" id="ticket_id" placeholder="Ticket ID" required class="form-control col-md-4">
+            <h6>Source Server:</h6>
+              <input type="text" name="SourceSRV" id="source_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+            <h6>Destination Server:</h6>
+              <input type="text" name="dest_srv" id="dest_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+            </div>
+
+            <div class="form-group">
+            <!--Connect IP, if set shows source and Dest IPs-->
+            <label for="connect_ip" class=" col-form-label">Set IP:</label>
+            <input type="checkbox" name="connect_ip" id="connect_ip" onclick="ShowConnectIPS()" class="form-control-sm col-md-1">
+            </div>
+            
+            <div id="connectips" class="form-group row col-md-11">
+                <!--Source IP -->
+                <input type="text" name="src_ip" id="src_ip" placeholder="Source IP:" class="form-control col-md-5">
+                <!--DEST IP -->
+                <input type="text" name="dst_ip" id="dst_ip" placeholder="Dest IP:" class="form-control col-md-5">
+            </div>
+            
+            <div class="form-group row col-md-8">
+                <label for="main_domain" class="col-md-2 col-form-label">Main Domain:</label>
+                <input type="url" name="main_domain" id="main_domain" placeholder="example.com" required class="form-control col-md-4">
+                
+                <label for="force_ns" class="col-md-2 col-form-label">Force NS:</label>
+                <input type="checkbox" name="force_ns" id="force_ns" required class="form-control-sm col-md-1" checked>
+            </div>
+
+            
+            <div class="form-group row">
+                    <label for="specific_migration" class="col-md-2 col-form-label">Especific Migration:</label>
+                    <input type="checkbox" name="specific_migration" id="specific_migration" onclick="ShowEspecificMigra()" class="form-control-sm col-md-1">
+            </div>        
+            
+            <!--IF CHECKED Specifig Migration SHOWS-->
+            <div id="especificmigration" class="form-group row col-md-10">
+              <span>Users:</span>
+              <p>{{ message }}</p>
+              <br>
+              <textarea class="form-control" v-model="message" placeholder="add multiple users, one per line"></textarea>
+            </div>
+           
+            <div class="form-group row">
+                <label for="brand" class="col-md-1 col-form-label">Brand:</label>
+                <select name="brand" id="brand" required class="form-control col-md-5" v-model="selected">
+                <option selected>HGBR</option>
+                <option>HGCO</option>
+                <option>HGCH</option>
+                <option>HGMX</option>
+                <span>Selected: {{ selected }}</span>
+            </select>
+
+            </div>
+            
+            <div class="form-group row col-md-12">
+            <input type="submit" value="Enviar" class="form-control col-md-4" @click="addGridData">
+            </div>
+
+        </form>  
+
+    </div>
+    <!---->
+
+    <form id="search">
+      <div class="form-group">
+        <label for="query" class="">Search</label>
+        <input id="query" name="query" class="form-control" v-model="searchQuery" />
+      </div>      
+    </form>
+    <demo-grid
+      :heroes="gridData"
+      :columns="gridColumns"
+      :filter-key="searchQuery"
+    >
+    </demo-grid>
+  </div>
+
+  <script>
+    // register the grid component
+    Vue.component("demo-grid", {
+      template: "#grid-template",
+      props: {
+        heroes: Array,
+        columns: Array,
+        filterKey: String
+      },
+      data: function() {
+        var sortOrders = {};
+        this.columns.forEach(function(key) {
+          sortOrders[key] = 1;
+        });
+        return {
+          sortKey: "",
+          sortOrders: sortOrders
+        };
+      },
+      computed: {
+        filteredHeroes: function() {
+          var sortKey = this.sortKey;
+          var filterKey = this.filterKey && this.filterKey.toLowerCase();
+          var order = this.sortOrders[sortKey] || 1;
+          var heroes = this.heroes;
+          if (filterKey) {
+            heroes = heroes.filter(function(row) {
+              return Object.keys(row).some(function(key) {
+                return (
+                  String(row[key])
+                    .toLowerCase()
+                    .indexOf(filterKey) > -1
+                );
+              });
+            });
+          }
+          if (sortKey) {
+            heroes = heroes.slice().sort(function(a, b) {
+              a = a[sortKey];
+              b = b[sortKey];
+              return (a === b ? 0 : a > b ? 1 : -1) * order;
+            });
+          }
+          return heroes;
+        }
+      },
+      filters: {
+        capitalize: function(str) {
+          return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+      },
+      methods: {
+        sortBy: function(key) {
+          this.sortKey = key;
+          this.sortOrders[key] = this.sortOrders[key] * -1;
+        }
+      }
+    });
+
+    // bootstrap the demo
+    var demo = new Vue({
+      el: "#demo",
+      data: {
+        searchQuery: "",
+        gridColumns: ["TicketID", "SourceServer", "DestinationServer", "IPS", "Domain", "ForceNameserver", "EspecMigration", "Brand"],
+        gridData: [
+          { 
+            TicketID: "123456",
+            SourceServer: "br00.hostgator.com.br",
+            DestinationServer: "br124.hostgator.com.br",
+            IPS: "",
+            Domain:"maindomain.com.br",
+            ForceNameserver: "Yes",
+            EspecMigration: "user123",
+            Brand: "HGBR" 
+          },
+          { 
+            TicketID: "123456",
+            SourceServer: "br00.hostgator.com.br",
+            DestinationServer: "br124.hostgator.com.br",
+            IPS: "",
+            Domain:"maindomain.com.br",
+            ForceNameserver: "Yes",
+            EspecMigration: "user123",
+            Brand: "HGMX" 
+          }
+        ]
+      },
+        methods: {
+          addGridData: function(){
+            this.gridData.push({
+              
+              TicketID: "123456",
+              SourceServer: "br00.hostgator.com.br",
+              DestinationServer: "br124.hostgator.com.br",
+              IPS: "",
+              Domain:"maindomain.com.br",
+              ForceNameserver: "Yes",
+              EspecMigration: "user123",
+              Brand: "HGBR" 
+
+            })
+          }
+        }
+    });
+  </script>
+</body>
+</html>

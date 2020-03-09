@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/form.css">
+    
+    <title>Migração Interna :: HostGator Latam</title>
+</head>
+<body>
+
+    <div class="container-fluid">
+        <div id="row">
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">Migração Interna :: Agendamento</h4>
+                <p>Preencha os campos necessários para agendar a Migração.</p>
+                <hr>
+                <p class="mb-0">Detalhes são importantes, por gentileza preencha os campos necessários.</p>
+              </div>    
+        </div>
+        
+            <form action="">
+                <h6>Ticket ID:</h6>
+                <div class="form-group row col-md-8">
+                    <input type="text" name="ticket_id" id="ticket_id" placeholder="Ticket ID" required class="form-control col-md-4">
+                </div>
+                
+                &nbsp;
+                <h6>Source Server:</h6>
+                <div class="form-group row col-md-8">
+                    <input type="text" name="SourceSRV" id="source_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+                </div>
+                <h6>Destination Server:</h6>
+                <div class="form-group row col-md-8">
+                    <input type="text" name="dest_srv" id="dest_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+                </div>
+
+                <div class="form-group row col-md-4">
+                <!--Connect IP, if set shows source and Dest IPs-->
+                <label for="connect_ip" class="col-md-2 col-form-label">Set IP:</label>
+                <input type="checkbox" name="connect_ip" id="connect_ip" onclick="ShowConnectIPS()" class="form-control-sm col-md-1">
+                </div>
+                
+                <div id="connectips" class="form-group row col-md-11">
+                    <!--Source IP -->
+                    <input type="text" name="src_ip" id="src_ip" placeholder="Source IP:" class="form-control col-md-5">
+                    <!--DEST IP -->
+                    <input type="text" name="dst_ip" id="dst_ip" placeholder="Dest IP:" class="form-control col-md-5">
+                </div>
+                
+                <div class="form-group row col-md-8">
+                    <label for="main_domain" class="col-md-2 col-form-label">Main Domain:</label>
+                    <input type="url" name="main_domain" id="main_domain" placeholder="example.com" required class="form-control col-md-4">
+                    
+                    <label for="force_ns" class="col-md-2 col-form-label">Force NS:</label>
+                    <input type="checkbox" name="force_ns" id="force_ns" required class="form-control-sm col-md-1" checked>
+                </div>
+
+                
+                <div class="form-group row col-md-10">
+                        <label for="specific_migration" class="col-md-2 col-form-label">Especific Migration:</label>
+                        <input type="checkbox" name="specific_migration" id="specific_migration" onclick="ShowEspecificMigra()" class="form-control-sm col-md-1">
+                </div>        
+                
+                <!--IF CHECKED Specifig Migration SHOWS-->
+                <div id="especificmigration" class="form-group row col-md-10">
+                    <p>Added Domains: </p>
+                    <input type="text" name="newdomain" id="newdomain" placeholder="domain.com.br" class="form-control col-md-4">
+                    <button onclick="especificmigration()"  class="form-control col-md-2">Add</button>
+                </div>
+               
+                <div class="form-group row col-md-6">
+                    <label for="brand" class="col-md-1 col-form-label">Brand:</label>
+                    <select name="brand" id="brand" required class="form-control col-md-5">
+                    <option value="br" selected>HGBR</option>
+                    <option value="co">HGCO</option>
+                    <option value="ch">HGCH</option>
+                    <option value="mx">HGMX</option>
+                </select>
+
+                </div>
+                
+                <div class="form-group row col-md-12">
+
+                <input type="reset" value="Limpar" class="form-control col-md-4">
+                <input type="submit" value="Enviar" class="form-control col-md-4">
+    
+                </div>
+
+            </form>
+    </div>
+    
+</body> 
+<script src="assets/js/form.js"></script>
+
+</html>

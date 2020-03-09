@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dash</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="https://unpkg.com/vue"></script>
+</head>
+
+<body>
+    <div class="container">
+    <form id="migra">
+
+        <!---->
+        <div class="form-group">
+            <h6>Ticket ID:</h6>
+            <input type="text" v-model="ticket_id" id="ticket_id" placeholder="Ticket ID" required class="form-control col-md-4">
+          <h6>Source Server:</h6>
+            <input type="text" v-model="source_srv" id="source_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+          <h6>Destination Server:</h6>
+            <input type="text" v-model="dest_srv" id="dest_srv" placeholder="Full Hostname" required class="form-control col-md-8">
+          </div>
+
+          <div class="form-group">
+          <!--Connect IP, if set shows source and Dest IPs-->
+          <label for="connect_ip" class=" col-form-label">Set IP:</label>
+          <input type="checkbox" v-model="connect_ip" id="connect_ip" class="form-control-sm col-md-1">
+          </div>
+          
+          <div id="connectips" class="form-group row col-md-11">
+              <!--Source IP -->
+              <input type="text" v-model="src_ip" id="src_ip" placeholder="Source IP:" class="form-control col-md-5">
+              <!--DEST IP -->
+              <input type="text" v-model="dst_ip" id="dst_ip" placeholder="Dest IP:" class="form-control col-md-5">
+          </div>
+          
+          <div class="form-group row col-md-8">
+              <label for="main_domain" class="col-md-2 col-form-label">Main Domain:</label>
+              <input type="text" v-model="main_domain" id="main_domain" placeholder="example.com" required class="form-control col-md-4">
+              
+              <label for="force_ns" class="col-md-2 col-form-label">Force NS:</label>
+              <input type="checkbox" v-model="force_ns" id="force_ns" required class="form-control-sm col-md-1" checked>
+          </div>
+
+          
+          <div class="form-group row">
+                  <label for="especific_migration" class="col-md-2 col-form-label">Especific Migration:</label>
+                  <input type="checkbox" v-model="especific_migration" id="especific_migration"  class="form-control-sm col-md-1">
+          </div>        
+          
+          <!--IF CHECKED Specifig Migration SHOWS-->
+          <div id="especificmigration" class="form-group row col-md-10">
+            <span>Users (please comma separated): </span>
+            <p>{{ especificusers }}</p>
+            <br>
+            <textarea class="form-control" v-model="especificusers" placeholder="add multiple users, one per line"></textarea>
+          </div>
+         
+          <div class="form-group row">
+              <label for="brand" class="col-md-1 col-form-label">Brand:</label>
+              <select id="brand" required class="form-control col-md-5" v-model="brand">
+              <option selected>HGBR</option>
+              <option>HGCO</option>
+              <option>HGCH</option>
+              <option>HGMX</option>
+              <span>Selected: {{ selected }}</span>
+          </select>
+
+          </div>
+          
+          <div class="form-group row col-md-12">
+          
+          </div>
+          <p><pre>data: {{$data | json 2}}</pre></p>
+      </form>  
+    </div>      
+        
+        <!-- 
+        <p>
+          <select v-model="selected">
+            <option>one</option>
+            <option>two</option>
+          </select>
+          {{selected}}
+        </p>
+        
+        <p>
+          <select v-model="multiSelect" multiple>
+            <option>one</option>
+            <option>two</option>
+            <option>three</option>
+          </select>
+          {{multiSelect}}
+        </p>
+        -->
+    
+
+      <script>
+          new Vue(
+              {
+                  el: '#migra',
+                    data: {
+                        ticket_id   :   '',
+                        source_srv  :   '',
+                        dest_srv    :   '',
+                        connect_ip  :   false,
+                        src_ip  :   '',
+                        dst_ip  :   '',
+                        main_domain :   '',
+                        force_ns    :   true,
+                        especific_migration  :   false,
+                        especificusers  :   '',
+                        brand : '',
+                        }
+                        
+              })
+            
+
+      </script>
+</body>
+</html>
